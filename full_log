@@ -7,16 +7,56 @@ WHERE date = 20180115 AND city = "SQL City";
 --Crime Report is record 3: 2 witnesses, one at last house on "Northwestern Dr" and one named Annabel on "Franklin Ave"              
               
 --Witness One--
-SELECT name, license_id, address_number, address_street_name
+SELECT name, id, license_id, address_number, address_street_name
   FROM person 
   WHERE address_street_name = "Northwestern Dr"
   ORDER BY address_number DESC
   LIMIT 1;
---Witness 1 is: Morty Schapiro - license # 118009--
+--Witness 1 is: Morty Schapiro - person_id = 14887 and license # 118009--
 
 --Witness Two--
-SELECT name, license_id, address_number, address_street_name
+SELECT name, id, license_id, address_number, address_street_name
 	FROM person
 	WHERE name LIKE "%Annabel%" AND address_street_name = "Franklin Ave";
---Witness 2 is: Annabel Miller - license # 490173--
+--Witness 2 is: Annabel Miller - person_id = 16371 and license # 490173--
+
+--Pull Interview Transcripts for both Witnesses--
+SELECT *
+  FROM interview
+  WHERE person_id = 14887 OR person_id = 16371
+
+--Annabel Transcript: I heard a gunshot and then saw a man run out. He had a "Get Fit Now Gym" bag. --
+--The membership number on the bag started with "48Z". Only gold members have those bags. --
+--The man got into a car with a plate that included "H42W".--
+
+--Morty Transcript: I saw the murder happen, and I recognized the killer from my gym when I was working out last week on January the 9th.--
+
+--Annabel Investigation, member # starts with 48Z and is a gold member--
+SELECT *
+  FROM get_fit_now_member
+  WHERE id LIKE "48Z%" AND membership_status = "gold"
+--Two suspect results: Joe Germuska - person_id = 28819 - membership_id = 48Z7A OR Jeremy Bowers - person_id = 67318 - membership_id = 48Z55 --
+
+--Morty Investigation, did either of those suspects check in on January 9th? (20180109)--
+SELECT *
+  FROM get_fit_now_check_in
+  WHERE membership_id = "48Z7A" OR membership_id = "48Z55"
+  AND check_in_date = 20180109
+ --Both checked in to the gym on January 9th 2018. Joe was there from 1600 to 1730 and Jeremy was there from 1530 to 1700--
+ 
+ --Annabel Investigation, license plate partial "H42W"
+ SELECT *
+	FROM drivers_license
+	WHERE plate_number LIKE '%H42W%'
+--Three returned options: 
+--Toyota Prius with plate number H42W0X registered to a blonde hair blue eye female, age 21 height 65. License ID: 183779--
+--Chevrolet Spark LS with plate number 0H42W2 registered to a brown hair brown eye male, age 30 height 70. License ID: 423327--
+--Nissan Altima with plate number 4H42WR registered to a black hair black eye male, age 21 height 71. License ID: 664760--
+
+--Check Driver's License Numbers against person table for a match to suspects--
+ SELECT *
+	FROM person
+	WHERE license_id = 183779 OR license_id = 423327 OR license_id = 664760
+--MATCH: The Chevrolet Spark is owned by Jeremy Bowers!--
+
 
