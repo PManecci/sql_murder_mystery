@@ -1,0 +1,22 @@
+--https://mystery.knightlab.com/--
+
+--Locate Crime Report--
+SELECT *
+FROM crime_scene_report
+WHERE date = 20180115 AND city = "SQL City";
+--Crime Report is record 3: 2 witnesses, one at last house on "Northwestern Dr" and one named Annabel on "Franklin Ave"              
+              
+--Witness One--
+SELECT name, license_id, address_number, address_street_name
+  FROM person 
+  WHERE address_street_name = "Northwestern Dr"
+  ORDER BY address_number DESC
+  LIMIT 1;
+--Witness 1 is: Morty Schapiro - license # 118009--
+
+--Witness Two--
+SELECT name, license_id, address_number, address_street_name
+	FROM person
+	WHERE name LIKE "%Annabel%" AND address_street_name = "Franklin Ave";
+--Witness 2 is: Annabel Miller - license # 490173--
+
