@@ -1,0 +1,17 @@
+--Pull interview Transcript for Jeremy Bowers--
+ SELECT transcript
+	FROM interview
+	WHERE person_id = 67318
+ 
+--RESULTS--
+ -- I was hired by a woman with a lot of money. -- (Income)
+ -- I don't know her name but I know she's around 5'5" (65") or 5'7" (67"). -- (Drivers_License)
+ -- She has red hair and she drives a Tesla Model S. -- (Drivers_License)
+ -- I know that she attended the SQL Symphony Concert 3 times in December 2017.-- (Facebook_Event_Check_In)
+ 
+ --Find potential matches in drivers_license--
+  SELECT *
+	FROM drivers_license
+	WHERE hair_color = "red"AND car_make = "Tesla" AND car_model = "Model S"
+	AND height BETWEEN 65 AND 67
+  --
